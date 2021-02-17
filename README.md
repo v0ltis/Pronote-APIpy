@@ -6,6 +6,12 @@
 
 The package is not avaiable yet :)
 
+### requirements:
+- Asyncio
+- Json
+- Aiohttp
+- graphqlclient
+
 
 ## Usage:
 
