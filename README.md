@@ -26,9 +26,13 @@ async def login():
                                            url='https://demo.index-education.net/pronote/eleve.html')
     print(client.name)
     print(client.classe)
+    print(client.messages[0].content)
+    print(client.messages[0].date)
     
 >>> "PARENT Fanny"
 >>> "3A"
+>>> "Bonne rentrée à tous et à toutes."
+>>> 2020-09-03 08:00:00
 ```
 
 
