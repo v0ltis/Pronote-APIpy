@@ -25,7 +25,7 @@ async def login():
     client = await Pronote.Connexion.login(username='demonstration', password='pronotevs',
                                            url='https://demo.index-education.net/pronote/eleve.html')
     print(client.name)
-    print(client.classe)
+    print(client.student_class)
     print(client.messages[0].content)
     print(client.messages[0].date)
     
