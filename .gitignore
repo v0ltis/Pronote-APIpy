@@ -1,0 +1,13 @@
+
+.idea/
+
+pronoteAPI/__pycache__/
+
+pronoteAPI/html/
+
+venv/
+pronoteAPI/ext/__pycache__/
+
+main.py
+
+Pronote-API/
