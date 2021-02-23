@@ -3,6 +3,85 @@ from .ext.query_format import Querys as Q
 from datetime import datetime
 
 
+class Etablishment:
+    def __init__(self, data):
+        self.name: str = data["name"]
+        self.address: str = data["address"][0]
+        self.postal_code: str = data["postalCode"]
+        self.city: str = data["city"]
+        self.website: str = data["website"]
+
+
+class Settings:
+    def __init__(self, data):
+        self.version: float = data["version"]
+        self.theme: int = data["theme"]
+
+
+class Authorizations:
+    def __init__(self, data):
+        self.create_discussions: bool = data["discussions"]
+        self.teachers_discussions: bool = data["teachersDiscussions"]
+        self.max_user_file_size: int = data["maxUserWorkFileSize"]
+        self.max_school_file_size: int = data["maxEstablishmentFileSize"]
+        self.print_file: bool = data["canPrint"]
+        self.hice_class_parts: bool = data["hideClassParts"]
+        self.edit_lessons: list = data["canEditLessons"]
+        self.seeable_weeks: list = data["timetableVisibleWeeks"]
+
+
+class Info:
+    def __init__(self, data):
+        self.id: str = data["id"]
+        """the id of the information"""
+        self.date: datetime = datetime.fromtimestamp(int(data["date"] / 1000))
+        """When the info has been posted."""
+        self.title: str = data["title"]
+        """The title of the info"""
+        self.author: str = data["author"]
+        """The author name"""
+        self.content: str = data["content"]
+        """The content of the info"""
+        self.html_content: str = data["htmlContent"]
+        """The content in HTML"""
+
+        files = []
+        for file in data["files"]:
+            files.append(File(file))
+        self.files: list[File] = files
+        """A list of class Files"""
+
+
+class File:
+    def __init__(self, data):
+        self.id: str = data["id"]
+        """The file ID"""
+        self.name: str = data["name"]
+        """The file name"""
+        self.url: str = data["url"]
+        """The URL to the file"""
+
+
+class Homework:
+    def __init__(self, data):
+        self.id: str = data["id"]
+        """The Homework ID"""
+        self.content: str = data["description"]
+        """The content of the homework"""
+        self.html_content:str = data["htmlDescription"]
+        """The HTML content of the homework"""
+        self.course: str = data["subject"]
+        """What course it is. Ex: Maths"""
+        self.given_at: datetime = datetime.fromtimestamp(data["givenAt"] / 1000)
+        """When the homework has been given"""
+        self.given_for: datetime = datetime.fromtimestamp(data["for"] / 1000)
+        """when it is necessary to make the homework"""
+        self.done: bool = data["done"]
+        """If the work has been marked as "done" """
+        self.color: str = data["color"]
+        """An Hex color of the course"""
+
+
 class User:
     def __init__(self, data, token):
 
@@ -37,68 +116,12 @@ class User:
         self.permissions = Authorizations(user["authorizations"])
         """Return user's permissions."""
 
-    async def fetch_infos(self):
+    async def fetch_homeworks(self) -> list[Homework]:
         client = GraphQLClient("http://127.0.0.1:21727/graphql")
         client.inject_token(self.__token, "Token")
-        # return client.execute(Q.homework)
+        data = client.execute(Q.homework % ("2021-02-01", "2021-03-01"))
+        homework = []
+        for work in data["data"]["homework"]:
+            homework.append(Homework(work))
 
-
-class Etablishment:
-    def __init__(self, data):
-        self.name: str = data["name"]
-        self.address: str = data["address"][0]
-        self.postal_code: str = data["postalCode"]
-        self.city: str = data["city"]
-        self.website: str = data["website"]
-
-
-class Settings:
-    def __init__(self, data):
-        self.version: float = data["version"]
-        self.theme: int = data["theme"]
-
-
-class Authorizations:
-    def __init__(self, data):
-        self.create_discussions: bool = data["discussions"]
-        self.teachers_discussions: bool = data["teachersDiscussions"]
-        self.max_user_file_size: int = data["maxUserWorkFileSize"]
-        self.max_school_file_size: int = data["maxEstablishmentFileSize"]
-        self.print_file: bool = data["canPrint"]
-        self.hice_class_parts: bool = data["hideClassParts"]
-        self.edit_lessons: list = data["canEditLessons"]
-        self.seeable_weeks: list = data["timetableVisibleWeeks"]
-
-
-class Info:
-    def __init__(self, data):
-        self.id: str = data["id"]
-        """the id of the information"""
-        self.timestamp: int = int(data["date"] / 1000)
-        """The timestamp ID when the info has been given"""
-        self.date: datetime = datetime.fromtimestamp(self.timestamp)
-        """When the info has been posted."""
-        self.title: str = data["title"]
-        """The title of the info"""
-        self.author: str = data["author"]
-        """The author name"""
-        self.content: str = data["content"]
-        """The content of the info"""
-        self.html_content: str = data["htmlContent"]
-        """The content in HTML"""
-
-        files = []
-        for file in data["files"]:
-            files.append(File(file))
-        self.files: list[File] = files
-        """A list of class Files"""
-
-
-class File:
-    def __init__(self, data):
-        self.id: str = data["id"]
-        """The file ID"""
-        self.name: str = data["name"]
-        """The file name"""
-        self.url: str = data["url"]
-        """The URL to the file"""
+        return homework

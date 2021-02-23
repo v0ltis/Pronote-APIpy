@@ -42,6 +42,7 @@ class Connexion:
                                    json=body) as resp:
                 # noinspection PyTypeChecker
                 token = json.loads(await resp.text())
+                print(token)
                 if "token" not in token.keys():
                     raise PronoteAPIError("Could not log in with given credentials ")
 
@@ -49,7 +50,6 @@ class Connexion:
         client.inject_token(token["token"], "Token")
 
         data = json.loads(client.execute(query))
-        print(data)
         data = data["data"]
 
         return User(data, token["token"])

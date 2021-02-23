@@ -44,3 +44,15 @@ class Querys:
             canPrint 
         }
      }}"""
+
+    homework = """{
+        homeworks(from: \"%s\", to: \"%s\"){
+            id
+            description
+            htmlDescription
+            subject
+            givenAt
+            for
+            done
+            color
+    }}"""
