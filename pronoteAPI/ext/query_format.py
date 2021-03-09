@@ -1,8 +1,43 @@
-class Querys:
 
-    empty_awnser = {}
+base = {"infos": [],
+        "user": {
+                 "name": None,
+                 "studentClass": {
+                     "name": None
+                 },
+                 "establishmentsInfo": [{
+                    "name": None,
+                    "address": None,
+                    "postalCode": None,
+                    "city": None,
+                    "website": None
+                 }],
+                 "userSettings": {
+                    "version": None,
+                    "theme": None,
+                    "unreadDiscussions": None
+                 },
+                 "authorizations": {
+                    "discussions": None,
+                    "teachersDiscussions": None,
+                    "timetableVisibleWeeks": None,
+                    "canEditLessons": None,
+                    "hideClassParts": None,
+                    "maxEstablishmentFileSize": None,
+                    "maxUserWorkFileSize": None,
+                    "canPrint": None
+                 }
 
-    all = """{
+             }}
+
+empty = """{
+    user {
+        name
+    }} """
+"""Everything, except the name will be "None" or empyt list"""
+
+
+full = """{
     infos {
         id
         date
@@ -45,7 +80,7 @@ class Querys:
         }
      }}"""
 
-    homework = """{
+homework = """{
         homeworks(from: \"%s\", to: \"%s\"){
             id
             description

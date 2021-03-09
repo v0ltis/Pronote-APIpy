@@ -1,9 +1,10 @@
 import aiohttp
 import subprocess
 from graphqlclient import GraphQLClient
-from .ext.query_format import Querys as Q
+from .ext import query_format as Q
 from .classes import User
 import json
+from mergedeep import merge
 
 
 class PronoteAPIError(Exception):
@@ -51,5 +52,7 @@ class Connexion:
 
         data = json.loads(client.execute(query))
         data = data["data"]
+
+        data = merge(Q.base, data)
 
         return User(data, token["token"])

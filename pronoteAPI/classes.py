@@ -1,5 +1,5 @@
 from graphqlclient import GraphQLClient
-from .ext.query_format import Querys as Q
+from .ext import query_format as Q
 from datetime import datetime
 
 
