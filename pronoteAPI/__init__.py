@@ -39,7 +39,6 @@ class Connexion:
                                    json=body) as resp:
                 # noinspection PyTypeChecker
                 token = json.loads(await resp.text())
-                print(token)
                 if "token" not in token.keys():
                     raise errors.ConnexionError("Could not log in with given credentials ")
 
@@ -50,7 +49,5 @@ class Connexion:
         data = data["data"]
 
         data = merge(Q.base, data)
-
-        print(data)
 
         return User(data, token["token"])
