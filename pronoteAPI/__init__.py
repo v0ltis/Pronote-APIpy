@@ -1,31 +1,27 @@
 import aiohttp
 import subprocess
 from graphqlclient import GraphQLClient
-from .ext import query_format as Q
+from .ext import query_format as Q, errors
 from .classes import User
 import json
 from mergedeep import merge
 
 
-class PronoteAPIError(Exception):
-    pass
-
-
 class Connexion:
     @staticmethod
     async def login(username: str = None, password: str = None, url: str = None, ent: str = None,
-                    query: list[Q] = None) -> User:
+                    query: list[Q] or Q = None) -> User:
         """
         Start a connexion with Pronote, and grab the token.
         :type query: object Q
         :param username: : Pronote/ENT username
         :param password: : Pronote/ENT password
         :param url: : Pronote link
-        :param ent: : (optional) ENT Name (could be found here: https://github.com/Litarvan/pronote-api#comptes-région-supportés )
+        :param ent: : (optional) ENT Name (could be found here: https://github.com/Litarvan/pronote-api#comptes-région-supportés)
         """
 
         if query is None:
-            query = Q.all
+            query = Q.full
 
         subprocess.Popen(["pronote-api-server"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         body = {
@@ -45,7 +41,7 @@ class Connexion:
                 token = json.loads(await resp.text())
                 print(token)
                 if "token" not in token.keys():
-                    raise PronoteAPIError("Could not log in with given credentials ")
+                    raise errors.ConnexionError("Could not log in with given credentials ")
 
         client = GraphQLClient("http://127.0.0.1:21727/graphql")
         client.inject_token(token["token"], "Token")
@@ -54,5 +50,7 @@ class Connexion:
         data = data["data"]
 
         data = merge(Q.base, data)
+
+        print(data)
 
         return User(data, token["token"])

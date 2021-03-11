@@ -11,3 +11,17 @@ pronoteAPI/ext/__pycache__/
 main.py
 
 Pronote-API/
+
+doc/
+
+make.bat
+
+Makefile
+
+README.md
+
+source/index.rst
+
+source/conf.py
+
+pronoteAPI/errors.py
