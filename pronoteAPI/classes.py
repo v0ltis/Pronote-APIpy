@@ -1,6 +1,7 @@
 from graphqlclient import GraphQLClient
 from .ext import query_format as Q
 from datetime import datetime
+import json
 
 
 class Etablishment:
@@ -116,12 +117,17 @@ class User:
         self.permissions = Authorizations(user["authorizations"])
         """Return user's permissions."""
 
-    async def fetch_homeworks(self) -> list[Homework]:
+    async def fetch_homeworks(self, since: str, to: str) -> list[Homework]:
+        """
+        :param since: The start date of wanted fetched homeworks: 2020-12-30
+        :param to: The end date of wanted fetched homeworks: 2021-01-28
+        :return: a list of homework
+        """
         client = GraphQLClient("http://127.0.0.1:21727/graphql")
         client.inject_token(self.__token, "Token")
-        data = client.execute(Q.homework % ("2021-02-01", "2021-03-01"))
+        data = json.loads(client.execute(Q.homework % (since, to)))
         homework = []
-        for work in data["data"]["homework"]:
+        for work in data["data"]["homeworks"]:
             homework.append(Homework(work))
 
         return homework
