@@ -7,7 +7,7 @@ base = {"infos": [],
                  },
                  "establishmentsInfo": [{
                     "name": None,
-                    "address": None,
+                    "address": [None],
                     "postalCode": None,
                     "city": None,
                     "website": None
