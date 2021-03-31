@@ -7,16 +7,23 @@ import json
 class Etablishment:
     def __init__(self, data):
         self.name: str = data["name"]
+        """The name of the etablishement"""
         self.address: str = data["address"][0]
+        """The adress of the Etablishement"""
         self.postal_code: str = data["postalCode"]
+        """The city's postal code"""
         self.city: str = data["city"]
+        """The city of the etbalishement"""
         self.website: str = data["website"]
+        """Etablishement's website"""
 
 
 class Settings:
     def __init__(self, data):
         self.version: float = data["version"]
+        """The Pronote Version"""
         self.theme: int = data["theme"]
+        """The color theme of the pronote web app"""
 
 
 class Authorizations:

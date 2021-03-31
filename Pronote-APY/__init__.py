@@ -23,7 +23,7 @@ class Connexion:
         if query is None:
             query = Q.full
 
-        subprocess.Popen(["pronote-api-server"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        # subprocess.Popen(["pronote-api-server"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         body = {
             "url": url,
             "username": username,
@@ -41,6 +41,8 @@ class Connexion:
                 token = json.loads(await resp.text())
                 if "token" not in token.keys():
                     raise errors.ConnexionError("Could not log in with given credentials ")
+
+        del body
 
         client = GraphQLClient("http://127.0.0.1:21727/graphql")
         client.inject_token(token["token"], "Token")
