@@ -25,3 +25,7 @@ source/index.rst
 source/conf.py
 
 pronoteAPI/errors.py
+
+docs/index.rst
+
+docs/conf.py

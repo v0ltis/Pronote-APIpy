@@ -51,5 +51,4 @@ class Connexion:
         data = data["data"]
 
         data = merge(Q.base, data)
-
         return User(data, token["token"])
